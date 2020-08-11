@@ -23,6 +23,7 @@ public class CityController {
 
     /**
      *  http://127.0.0.1/cities/522   POST
+     *  {"currentPage":"1","pageSize":"5"}
      */
     @PostMapping(value = "/cities/{countryId}",consumes = "application/json")
     public PageInfo<City> getCitiesBySearchVo(@PathVariable int countryId, @RequestBody SearchVo searchVo){
