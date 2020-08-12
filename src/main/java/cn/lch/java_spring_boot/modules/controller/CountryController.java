@@ -14,7 +14,7 @@ public class CountryController {
     private CountryService countryService;
 
     /**
-     *  http://127.0.0.1/country/522   GET
+     *  http://localhost/country/522   GET
      */
     @GetMapping("/country/{countryId}")
     public Country getCountryByCountryId(@PathVariable int countryId){
@@ -22,7 +22,7 @@ public class CountryController {
     }
 
     /**
-     *  http://127.0.0.1/country?countryName=China   GET
+     *  http://localhost/country?countryName=China   GET
      */
     @GetMapping("/country")
     public Country getCountryByCountryName(@RequestParam String countryName) {
