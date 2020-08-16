@@ -1,16 +1,34 @@
 package cn.lch.java_spring_boot.modules.controller;
 
+import cn.lch.java_spring_boot.modules.Service.CityService;
+import cn.lch.java_spring_boot.modules.entity.City;
+import cn.lch.java_spring_boot.modules.entity.Country;
 import cn.lch.java_spring_boot.modules.vo.ApplicatonTest;
+import cn.lch.java_spring_boot.modules.Service.CountryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Controller
+@RequestMapping("/test")
 public class TestController {
+
+    @Autowired
+    private ApplicatonTest applicationTest;
+    @Autowired
+    private CityService cityService;
+    @Autowired
+    private CountryService countryServcie;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TestController.class);
 
@@ -59,5 +77,34 @@ public class TestController {
     @ResponseBody
     public String hello(){
         return "Hello,World!";
+    }
+
+    /**
+     * http://localhost/test/index
+     */
+    @GetMapping("/index")
+    public String testIndexPage(ModelMap modelMap) {
+        int countryId = 522;
+        List<City> cities = cityService.getCitiesByCountryId(countryId);
+        cities = cities.stream().limit(10).collect(Collectors.toList());
+        Country country = countryServcie.getCountryByCountryId(countryId);
+        modelMap.addAttribute("thymeleafTitle", "scdscsadcsacd");
+        modelMap.addAttribute("checked", true);
+        modelMap.addAttribute("currentNumber", 99);
+        modelMap.addAttribute("changeType", "checkbox");
+        modelMap.addAttribute("baiduUrl", "/test/log");
+        modelMap.addAttribute("city", cities.get(0));
+        modelMap.addAttribute("shopLogo",
+                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2019540177,2384259517&fm=26&gp=0.jpg");
+        modelMap.addAttribute("template", "test/index");
+        return "index";
+    }
+    /**
+     * http://localhost/test/index2
+     */
+    @GetMapping("/index2")
+    public String testIndex2Page(ModelMap modelMap) {
+        modelMap.addAttribute("template", "test/index2");
+        return "index";
     }
 }
