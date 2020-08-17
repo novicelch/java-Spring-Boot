@@ -13,9 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,28 +56,30 @@ public class TestController {
         LOGGER.error("This is error log");
         return "This is log test";
     }
+
     /**
      * http://localhost:8081/config
      */
     @Autowired
     ApplicatonTest test;
+
     @GetMapping("config")
     @ResponseBody
-    public String config(){
+    public String config() {
         String str =
                 new StringBuffer().append(port).append("------").append(name)
                         .append("-------").append(age).append("-------").append(desc).append("<br>")
-                .append(test.getPort()).append("-------").append(test.getName())
+                        .append(test.getPort()).append("-------").append(test.getName())
                         .append("---------").append(test.getAge()).append("--------").append(test.getDesc()).toString();
         return str;
     }
-    /**
-     *@ http://localhost:8081/hello
-     */
 
+    /**
+     * @ http://localhost:8081/hello
+     */
     @GetMapping("hello")
     @ResponseBody
-    public String hello(){
+    public String hello() {
         return "Hello,World!";
     }
 
@@ -96,15 +100,30 @@ public class TestController {
         modelMap.addAttribute("city", cities.get(0));
         modelMap.addAttribute("shopLogo",
                 "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2019540177,2384259517&fm=26&gp=0.jpg");
-        modelMap.addAttribute("template", "test/index");
+        modelMap.addAttribute("country", country);
+        modelMap.addAttribute("cities", cities);
+        modelMap.addAttribute("updateCityUri", "/city");
+//        modelMap.addAttribute("template", "test/index");
         return "index";
     }
+
     /**
      * http://localhost/test/index2
      */
     @GetMapping("/index2")
     public String testIndex2Page(ModelMap modelMap) {
-        modelMap.addAttribute("template", "test/index2");
+//        modelMap.addAttribute("template", "test/index2");
         return "index";
+    }
+
+    /*
+     * http://localhost/test/testDesc?paramKey=艹 ---- get
+     */
+    @GetMapping("/testDesc")
+    @ResponseBody
+    public String testDesc(HttpServletRequest request,
+                           @RequestParam(value = "paramKey") String paramValue) {
+        String paramValue2 = request.getParameter("paramKey");
+        return "This is test module desc." + paramValue + "==" + paramValue2;
     }
 }

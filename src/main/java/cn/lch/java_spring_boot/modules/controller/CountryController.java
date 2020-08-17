@@ -1,5 +1,6 @@
 package cn.lch.java_spring_boot.modules.controller;
 
+import cn.lch.java_spring_boot.aspect.ServiceAnnotation;
 import cn.lch.java_spring_boot.modules.Service.CountryService;
 import cn.lch.java_spring_boot.modules.entity.Country;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class CountryController {
      *  http://localhost/country?countryName=China   GET
      */
     @GetMapping("/country")
+    @ServiceAnnotation(value = "ccc")
     public Country getCountryByCountryName(@RequestParam String countryName) {
         return countryService.getCountryByCountryName(countryName);
     }
@@ -34,7 +36,7 @@ public class CountryController {
      */
     @GetMapping("/redis/country/{countryId}")
     public Country mograteCountryByRedis(@PathVariable int countryId) {
-        return countryService.mograteCountryByRedis(countryId);
+        return countryService.migrateCountryByRedis(countryId);
     }
 
 }
