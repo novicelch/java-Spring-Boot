@@ -51,6 +51,14 @@ public class TestController {
     private String desc;
 
     /**
+     * http://localhost/test/indexSimple
+     */
+    @GetMapping("indexSimple")
+    public String indexSimple(){
+        return "indexSimple";
+    }
+
+    /**
      * http://localhost:8081/logTest
      */
     @GetMapping("/logTest")
