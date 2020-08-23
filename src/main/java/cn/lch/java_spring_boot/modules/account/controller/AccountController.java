@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AccountController {
 
     /**
-     * http://localhost/account/login ---- g
+     * http://localhost/account/login ---- get
      */
     @GetMapping("/login")
     public String loginPage() {
@@ -22,5 +22,18 @@ public class AccountController {
     @GetMapping("/register")
     public String registerPage() {
         return "indexSimple";
+    }
+
+    /**
+     * http://localhost/account/users ---- get
+     */
+    @GetMapping("/users")
+    public String usersPage() {
+        return "index";
+    }
+
+    @GetMapping("/roles")
+    public String rolesPage() {
+        return "index";
     }
 }
