@@ -1,5 +1,6 @@
 package cn.lch.java_spring_boot.modules.account.service.impl;
 
+import cn.lch.java_spring_boot.config.ResourceConfigBean;
 import cn.lch.java_spring_boot.modules.account.dao.UserDao;
 import cn.lch.java_spring_boot.modules.account.dao.UserRoleDao;
 import cn.lch.java_spring_boot.modules.account.entity.Role;
@@ -12,7 +13,10 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +28,8 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
     @Autowired
     UserRoleDao userRoleDao;
+    @Autowired
+    ResourceConfigBean resourceConfigBean;
 
     @Override
     @Transactional
@@ -76,6 +82,8 @@ public class UserServiceImpl implements UserService {
                 Result.ResultStatus.SUCCESS.status, "修改成功.", user);
     }
 
+
+
     @Override
     @Transactional
     public Result deleteUser(int userId) {
@@ -88,4 +96,51 @@ public class UserServiceImpl implements UserService {
     public User getUserByUserId(int userId) {
         return userDao.getUserByUserId(userId);
     }
+
+    @Override
+    public Result<String> uploadUserImg(MultipartFile file) {
+        if (file.isEmpty()) {
+            return new Result<String>(
+                    Result.ResultStatus.FAILD.status, "Please select img.");
+        }
+
+        String relativePath = "";
+        String destFilePath = "";
+        try {
+            String osName = System.getProperty("os.name");
+            if (osName.toLowerCase().startsWith("win")) {
+                destFilePath = resourceConfigBean.getLocationPathForWindows() +
+                        file.getOriginalFilename();
+            } else {
+                destFilePath = resourceConfigBean.getLocationPathForLinux()
+                        + file.getOriginalFilename();
+            }
+            relativePath = resourceConfigBean.getRelativePath() +
+                    file.getOriginalFilename();
+            File destFile = new File(destFilePath);
+            file.transferTo(destFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Result<String>(
+                    Result.ResultStatus.FAILD.status, "Upload failed.");
+        }
+
+        return new Result<String>(
+                Result.ResultStatus.SUCCESS.status, "Upload success.", relativePath);
+    }
+
+    @Override
+    @Transactional
+    public Result<User> updateUserProfile(User user) {
+        User userTemp = userDao.getUserByUserName(user.getUserName());
+        if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
+            return new Result<User>(Result.ResultStatus.FAILD.status, "User name is repeat.");
+        }
+
+        userDao.updateUser(user);
+
+        return new Result<User>(Result.ResultStatus.SUCCESS.status, "Edit success.", user);
+    }
+
 }

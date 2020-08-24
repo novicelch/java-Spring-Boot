@@ -50,12 +50,16 @@ public interface RoleDao {
             "where role_id = #{roleId}")
     void updateRole(Role role);
 
-    @Select("select * from role where role_name = #{RoleName}")
-    Role selectByRoleName(String roleName);
 
     @Select("select * from role where role_id = #{roleId}")
     Role getRoleByRoleId(int roleId);
 
     @Delete("delete from role where role_id = #{roleId}")
     void deleteRole(int roleId);
+
+    @Select("select * from role r left join role_resource rr on r.role_id = rr.role_id where rr.resource_id = #{resourceId}")
+    List<Role> getRolesByResourceId(int resourceId);
+
+    @Select("select * from role where role_name = #{roleName} limit 1")
+    Role getRoleByRoleName(String roleName);
 }

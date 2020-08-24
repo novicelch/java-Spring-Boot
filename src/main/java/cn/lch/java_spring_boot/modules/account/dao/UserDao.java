@@ -51,4 +51,7 @@ public interface UserDao {
                     javaType = List.class,
                     many = @Many(select = "cn.lch.java_spring_boot.modules.account.dao.RoleDao.getRolesByUserId"))})
     User getUserByUserId(int userId);
+
+    @Select("select * from user where user_name = #{userName}")
+    User getUserByUserName(String userName);
 }

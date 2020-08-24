@@ -50,7 +50,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Result<Role> updateRole(Role role) {
 
-        Role roleTemp = roleDao.selectByRoleName(role.getRoleName());
+        Role roleTemp = roleDao.getRolesByRoleName(role.getRoleName());
         if (roleTemp != null && roleTemp.getRoleId() != role.getRoleId()) {
             return new Result<Role>(
                     Result.ResultStatus.FAILD.status, "您不可以修改他人信息！！！.");
