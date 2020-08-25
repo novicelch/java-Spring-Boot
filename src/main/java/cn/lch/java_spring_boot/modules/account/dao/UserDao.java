@@ -17,6 +17,7 @@ public interface UserDao {
     void insert(User user);
 
     @Select("select * from user where user_name = #{userName}")
+    @ResultMap(value = "userResults")
     User selectByUserName(String userName);
 
     @Select("<script>" +

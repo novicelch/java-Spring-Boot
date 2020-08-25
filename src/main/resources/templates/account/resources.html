@@ -98,6 +98,7 @@
 
 <script type="text/javascript">
 
+	var DEFAULT_PAGE_SIZE=5;
 // 加载页面时，需要执行的 js 代码
 $(document).ready(function() {
 	initTable(DEFAULT_PAGE_SIZE);
@@ -161,7 +162,6 @@ function updateResource() {
 		success : function (data) {
 			if (data.status == 200) {
 				initTable(DEFAULT_PAGE_SIZE);
-			} else {
 				layer.msg(data.message, {icon: 0});
 			}
 		},
